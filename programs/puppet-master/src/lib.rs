@@ -8,7 +8,7 @@ declare_id!("HmbTLCmaGvZhKnn1Zfa1JVnp7vkMV4DYVxPLWBVoN65L");
 
 
 #[program]
-mod prime_puppet {
+mod puppet_master {
     use super::*;
     pub fn pull_strings(ctx: Context<PullStrings>, data: u64) -> Result<()> {
         puppet::cpi::set_data(ctx.accounts.set_data_ctx(), data)

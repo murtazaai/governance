@@ -1,16 +1,48 @@
-import * as anchor from "@coral-xyz/anchor";
-import { Program } from "@coral-xyz/anchor";
-import { Puppet } from "../target/types/puppet";
+import * as anchor from '@coral-xyz/anchor'
+import { Program } from '@coral-xyz/anchor'
+import { Keypair } from '@solana/web3.js'
+import { expect } from 'chai'
+import { Puppet } from '../node_modules/types/puppet'
+import { PuppetMaster } from '../node_modules/types/puppet_master'
 
-describe("puppet", () => {
-  // Configure the client to use the local cluster.
-  anchor.setProvider(anchor.AnchorProvider.env());
 
-  const program = anchor.workspace.Puppet as Program<Puppet>;
+describe('puppet', () => {
+  const provider = anchor.AnchorProvider.env()
+  anchor.setProvider(provider)
 
-  it("Is initialized!", async () => {
-    // Add your test here.
-    const tx = await program.methods.initialize().rpc();
-    console.log("Your transaction signature", tx);
-  });
-});
+
+  const puppetProgram = anchor.workspace.Puppet as Program<Puppet>
+  const puppetMasterProgram = anchor.workspace
+    .PuppetMaster as Program<PuppetMaster>
+
+
+  const puppetKeypair = Keypair.generate()
+
+
+  it('Does CPI!', async () => {
+    await puppetProgram.methods
+      .initialize()
+      .accounts({
+        puppet: puppetKeypair.publicKey,
+        user: provider.wallet.publicKey,
+      })
+      .signers([puppetKeypair])
+      .rpc()
+
+
+    await puppetMasterProgram.methods
+      .pullStrings(new anchor.BN(42))
+      .accounts({
+        puppetProgram: puppetProgram.programId,
+        puppet: puppetKeypair.publicKey,
+      })
+      .rpc()
+
+
+    expect(
+      (
+        await puppetProgram.account.data.fetch(puppetKeypair.publicKey)
+      ).data.toNumber()
+    ).to.equal(42)
+  })
+})

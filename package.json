@@ -1,5 +1,10 @@
 {
+    "name": "puppet",
+    "description": "Puppet rule",
+    "version": "1.000000001",
+    "license" : "(ISC OR GPL-3.0)",
     "scripts": {
+        "test": "npm run test",
         "lint:fix": "prettier */*.js \"*/**/*{.js,.ts}\" -w",
         "lint": "prettier */*.js \"*/**/*{.js,.ts}\" --check"
     },
