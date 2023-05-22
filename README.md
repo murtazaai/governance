@@ -1,5 +1,5 @@
 # Solana Governance
-## Puppet-show 
+## Puppet
 
 ### Why select puppet: Unique Selling Proposition (USP)?
 
