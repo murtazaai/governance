@@ -1,6 +1,6 @@
 {
-    "name": "puppet",
-    "description": "Puppet rule",
+    "name": "governance",
+    "description": "governance",
     "version": "1.000000001",
     "license" : "(ISC OR GPL-3.0)",
     "scripts": {
